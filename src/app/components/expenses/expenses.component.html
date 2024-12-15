@@ -1,0 +1,47 @@
+<div class="container mx-auto mt-5">
+    <!-- Form for Adding a New Expense -->
+    <mat-card class="p-4 mb-4">
+        <h3 class="text-xl mb-4">Add New Expense</h3>
+        <mat-form-field class="w-full mb-2">
+            <mat-label>Title</mat-label>
+            <input matInput [(ngModel)]="newExpense.title" />
+        </mat-form-field>
+        <mat-form-field class="w-full mb-2">
+            <mat-label>Amount</mat-label>
+            <input matInput type="number" [(ngModel)]="newExpense.amount" />
+        </mat-form-field>
+        <mat-form-field class="w-full mb-2">
+            <mat-label>Date</mat-label>
+            <input matInput type="date" [(ngModel)]="newExpense.date" />
+        </mat-form-field>
+        <mat-form-field class="w-full mb-4">
+            <mat-label>Category</mat-label>
+            <input matInput [(ngModel)]="newExpense.category" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="addExpense()">
+            Add Expense
+        </button>
+    </mat-card>
+
+    <mat-card>
+        <h3 class="text-xl mb-4">Expenses List</h3>
+        <ul>
+            <li *ngFor="let expense of expenses" class="flex justify-between items-center mb-2">
+                <span>
+                    <strong>{{ expense.title }}</strong> - {{ expense.amount | currency }}
+                    ({{ expense.category }}) on {{ expense.date | date: 'shortDate' }}
+                </span>
+                <span>
+                    <button mat-icon-button color="warn" (click)="deleteExpense(expense.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </span>
+            </li>
+        </ul>
+    </mat-card>
+
+    <mat-card class="p-4 mt-4">
+        <h3 class="text-xl mb-4">Expense Summary</h3>
+        <canvas id="expenseChart" width="400" height="400"></canvas>
+    </mat-card>
+</div>
