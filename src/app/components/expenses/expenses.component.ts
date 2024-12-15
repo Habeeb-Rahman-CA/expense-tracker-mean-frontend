@@ -7,12 +7,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Chart } from "chart.js"
+import { Chart, registerables } from "chart.js"
+import { MatInputModule } from '@angular/material/input';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-expenses',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatIconModule, MatInputModule],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css'
 })
@@ -23,41 +26,66 @@ export class ExpensesComponent implements OnInit {
   expenses: IExpense[] = []
   newExpense: IExpense = { id: '', title: '', amount: 0, date: '', category: '' };
   chart: any
+  token = localStorage.getItem('token') || ''
 
   ngOnInit(): void {
     this.getAllExpenses()
   }
 
   getAllExpenses() {
-    this.expensesService.getExpenses().subscribe((data: IExpense[]) => {
-      this.expenses = data
-      this.generateChart()
-    })
+    this.expensesService.getExpenses(this.token).subscribe({
+      next: (data: IExpense[]) => {
+        this.expenses = data;
+        this.generateChart();
+      },
+      error: (err) => {
+        console.error('Error fetching expenses:', err);
+        alert('Failed to fetch expenses. Please try again later.');
+      }
+    });
   }
 
   addExpense() {
-    this.expensesService.addExpenses(this.newExpense).subscribe((data: IExpense) => {
-      this.expenses.push(data)
-      this.newExpense = {
-        id: '', title: '', amount: 0, date: '', category: ''
+    this.expensesService.addExpenses(this.newExpense, this.token).subscribe({
+      next: () => {
+        this.newExpense = {
+          id: '', title: '', amount: 0, date: '', category: ''
+        };
+        this.getAllExpenses();
+      },
+      error: (err) => {
+        console.error('Error adding expense:', err);
+        alert('Failed to add expense. Please check your input and try again.');
       }
-    })
+    });
   }
 
   updateExpense(expense: IExpense) {
-    this.expensesService.updateExpense(expense).subscribe(() => {
-      this.getAllExpenses()
-    })
+    this.expensesService.updateExpense(expense, this.token).subscribe({
+      next: () => {
+        this.getAllExpenses();
+      },
+      error: (err) => {
+        console.error(`Error updating expense with ID ${expense.id}:`, err);
+        alert('Failed to update expense. Please try again.');
+      }
+    });
   }
 
   deleteExpense(id: string) {
-    this.expensesService.deleteExpense(id).subscribe(() => {
-      this.expenses = this.expenses.filter((expense) => expense.id !== id)
-    })
+    this.expensesService.deleteExpense(id, this.token).subscribe({
+      next: () => {
+        this.getAllExpenses();
+      },
+      error: (err) => {
+        console.error(`Error deleting expense with ID ${id}:`, err);
+        alert('Failed to delete expense. Please try again.');
+      }
+    });
   }
 
   generateChart() {
-    const categories = this.expenses.reduce((acc: {[key: string]: number}, expense: IExpense) => {
+    const categories = this.expenses.reduce((acc: { [key: string]: number }, expense: IExpense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
     }, {});

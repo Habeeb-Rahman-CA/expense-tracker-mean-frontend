@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IExpense } from '../model/interface';
 import { Observable } from 'rxjs';
@@ -12,19 +12,23 @@ export class ExpensesService {
 
   constructor(private http: HttpClient) { }
 
-  getExpenses(): Observable<IExpense[]>{
-    return this.http.get<IExpense[]>(this.expensesUrl)
+  getExpenses(token: string): Observable<IExpense[]> {
+    const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    return this.http.get<IExpense[]>(this.expensesUrl, { headers: header })
   }
 
-  addExpenses(expenses: IExpense): Observable<IExpense>{
-    return this.http.post<IExpense>(this.expensesUrl, expenses)
+  addExpenses(expenses: IExpense, token: string): Observable<IExpense> {
+    const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    return this.http.post<IExpense>(this.expensesUrl, expenses, { headers: header })
   }
 
-  updateExpense(expense: IExpense): Observable<IExpense> {
-    return this.http.put<IExpense>(`${this.expensesUrl}/${expense.id}`, expense);
+  updateExpense(expense: IExpense, token: string): Observable<IExpense> {
+    const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    return this.http.put<IExpense>(`${this.expensesUrl}/${expense.id}`, expense, { headers: header });
   }
 
-  deleteExpense(id: string) {
-    return this.http.delete(`${this.expensesUrl}/${id}`);
+  deleteExpense(id: string, token: string) {
+    const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    return this.http.delete(`${this.expensesUrl}/${id}`, { headers: header });
   }
 }
