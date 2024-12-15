@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -18,22 +18,23 @@ import { RouterModule } from '@angular/router';
 export class RegisterComponent {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
+      name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
     });
   }
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      const { email, password } = this.registerForm.value;
+      const { name, email, password } = this.registerForm.value;
 
-      this.authService.register({ email, password}).subscribe({
+      this.authService.register({name, email, password}).subscribe({
         next: () => {
           alert('Registration successful');
           this.registerForm.reset();
+          this.router.navigate(['/login'])
         },
         error: (err) => {
           alert('Registration failed')

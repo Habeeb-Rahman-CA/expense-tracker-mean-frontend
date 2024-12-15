@@ -4,6 +4,11 @@
 
         <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
             <mat-form-field appearance="fill" class="w-full mb-4">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" type="text" placeholder="Enter your name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full mb-4">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email" type="email" placeholder="Enter your email" />
             </mat-form-field>
@@ -11,11 +16,6 @@
             <mat-form-field appearance="fill" class="w-full mb-4">
                 <mat-label>Password</mat-label>
                 <input matInput formControlName="password" type="password" placeholder="Enter your password" />
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="w-full mb-4">
-                <mat-label>Confirm Password</mat-label>
-                <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password" />
             </mat-form-field>
 
             <button mat-raised-button color="primary" class="w-full" [disabled]="!registerForm.valid">

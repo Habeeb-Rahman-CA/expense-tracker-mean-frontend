@@ -6,7 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +19,7 @@ export class LoginComponent {
 
   authService = inject(AuthService)
   loginForm: FormGroup;
+  router = inject(Router)
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -35,6 +36,7 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login successful:', response);
           alert('Login Successful!');
+          this.router.navigate(['/dashboard'])
         },
         error: (err) => {
           alert("Login failed")
