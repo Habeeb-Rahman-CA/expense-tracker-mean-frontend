@@ -29,7 +29,7 @@
                 <ul>
                     <li *ngFor="let expense of expenses" class="flex justify-between items-center mb-2">
                         <span>
-                            <strong>{{ expense.title }}</strong> - {{ expense.amount | currency }}
+                            <strong>{{ expense.title }}</strong> - {{ expense.amount | currency: "INR" }}
                             ({{ expense.category }}) on {{ expense.date | date: 'shortDate' }}
                         </span>
                         <span>
@@ -50,11 +50,21 @@
     <div class="flex gap-4">
         <mat-card class="p-4 mt-4 w-3/4">
             <h3 class="text-xl mb-4">Expense Summary</h3>
+            <div *ngIf="summary.length > 0; else noData">
+                <div *ngFor="let item of summary" class="mb-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold">{{ item._id }}</span>
+                        <span class="text-blue-500 font-bold">{{ item.total | currency : "INR" }}</span>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noData>
+                <p class="text-gray-500">No expense data available.</p>
+            </ng-template>
         </mat-card>
         <mat-card class="p-4 mt-4 w-1/4">
             <canvas id="expenseChart" class="w-1"></canvas>
         </mat-card>
     </div>
 
-    
 </div>

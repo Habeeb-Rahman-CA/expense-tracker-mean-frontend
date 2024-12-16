@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IExpense } from '../model/interface';
+import { IExpense, IExpenseSummary } from '../model/interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -30,5 +30,10 @@ export class ExpensesService {
   deleteExpense(id: string, token: string) {
     const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
     return this.http.delete(`${this.expensesUrl}/${id}`, { headers: header });
+  }
+
+  getExpenseSummary(token: string): Observable<IExpenseSummary[]>{
+    const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    return this.http.get<IExpenseSummary[]>(`${this.expensesUrl}/summary`, {headers: header})
   }
 }

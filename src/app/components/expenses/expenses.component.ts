@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ExpensesService } from '../../services/expenses.service';
-import { IExpense } from '../../model/interface';
+import { IExpense, IExpenseSummary } from '../../model/interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -27,9 +27,11 @@ export class ExpensesComponent implements OnInit {
   newExpense: Partial<IExpense> = { title: '', amount: 0, date: '', category: '' };
   chart: any
   token = localStorage.getItem('token') || ''
+  summary : IExpenseSummary[] = []
 
   ngOnInit(): void {
     this.getAllExpenses()
+    this.getExpenseSummary()
   }
 
   getAllExpenses() {
@@ -53,6 +55,7 @@ export class ExpensesComponent implements OnInit {
           title: '', amount: 0, date: '', category: ''
         };
         this.getAllExpenses();
+        this.getExpenseSummary()
       },
       error: (err) => {
         console.error('Error adding expense:', err);
@@ -77,12 +80,25 @@ export class ExpensesComponent implements OnInit {
     this.expensesService.deleteExpense(id, this.token).subscribe({
       next: () => {
         this.getAllExpenses();
+        this.getExpenseSummary()
       },
       error: (err) => {
         console.error(`Error deleting expense with ID ${id}:`, err);
         alert('Failed to delete expense. Please try again.');
       }
     });
+  }
+
+  getExpenseSummary(){
+    this.expensesService.getExpenseSummary(this.token).subscribe({
+      next: (data: IExpenseSummary[]) =>{
+        this.summary = data
+      },
+      error: (err) =>{
+        alert("expense summary is failed to fetch")
+        console.error(err)
+      }
+    })
   }
 
   generateChart() {

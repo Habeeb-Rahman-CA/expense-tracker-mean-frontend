@@ -5,7 +5,7 @@ export interface IUser {
 }
 
 export interface IExpense {
-    _id: string ;
+    _id: string;
     user?: string
     title: string;
     amount: number;
@@ -13,3 +13,7 @@ export interface IExpense {
     date: string;
 }
 
+export interface IExpenseSummary {
+    _id: string;
+    total: number;
+}
