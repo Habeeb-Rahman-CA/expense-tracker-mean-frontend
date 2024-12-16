@@ -5,10 +5,11 @@ export interface IUser {
 }
 
 export interface IExpense {
+    id: string;
+    user?: string
     title: string;
     amount: number;
     category: string;
-    date: string; 
-    id: string;
+    date: string;
 }
 

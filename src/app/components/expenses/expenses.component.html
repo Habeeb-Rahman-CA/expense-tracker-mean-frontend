@@ -25,21 +25,27 @@
 
         <mat-card class="p-4 flex-1">
             <h3 class="text-xl mb-4">Expenses List</h3>
-            <ul>
-                <li *ngFor="let expense of expenses" class="flex justify-between items-center mb-2">
-                    <span>
-                        <strong>{{ expense.title }}</strong> - {{ expense.amount | currency }}
-                        ({{ expense.category }}) on {{ expense.date | date: 'shortDate' }}
-                    </span>
-                    <span>
-                        <button mat-icon-button color="warn" (click)="deleteExpense(expense.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </span>
-                </li>
-            </ul>
+            <div *ngIf="expenses && expenses.length > 0; else noExpenses">
+                <ul>
+                    <li *ngFor="let expense of expenses" class="flex justify-between items-center mb-2">
+                        <span>
+                            <strong>{{ expense.title }}</strong> - {{ expense.amount | currency }}
+                            ({{ expense.category }}) on {{ expense.date | date: 'shortDate' }}
+                        </span>
+                        <span>
+                            <button mat-icon-button color="warn" (click)="deleteExpense(expense.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </span>
+                    </li>
+                </ul>
+            </div>
         </mat-card>
     </div>
+
+    <ng-template #noExpenses>
+        <p>No expenses found.</p>
+    </ng-template>
 
     <mat-card class="p-4 mt-4">
         <h3 class="text-xl mb-4">Expense Summary</h3>

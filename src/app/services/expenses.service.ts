@@ -17,7 +17,7 @@ export class ExpensesService {
     return this.http.get<IExpense[]>(this.expensesUrl, { headers: header })
   }
 
-  addExpenses(expenses: IExpense, token: string): Observable<IExpense> {
+  addExpenses(expenses: Partial<IExpense>, token: string): Observable<IExpense> {
     const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
     return this.http.post<IExpense>(this.expensesUrl, expenses, { headers: header })
   }

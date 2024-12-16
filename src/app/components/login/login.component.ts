@@ -33,8 +33,8 @@ export class LoginComponent {
       const { email, password } = this.loginForm.value;
 
       this.authService.login({email, password}).subscribe({
-        next: (response) => {
-          console.log('Login successful:', response);
+        next: (response: any) => {
+          localStorage.setItem('token', response.token)
           alert('Login Successful!');
           this.router.navigate(['/dashboard'])
         },
