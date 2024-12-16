@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ExpensesService {
 
-  expensesUrl = 'http://localhost:5001/api/expenses'
+  expensesUrl = 'https://expense-tracker-mean-backend.onrender.com/api/expenses'
 
   constructor(private http: HttpClient) { }
 
