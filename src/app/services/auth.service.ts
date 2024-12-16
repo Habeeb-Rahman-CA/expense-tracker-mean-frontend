@@ -9,7 +9,7 @@ import { IUser } from '../model/interface';
 })
 export class AuthService {
 
-  authUrl = "https://expense-tracker-mean-backend.onrender.com/api/auth"
+  authUrl = "https://expense-tracker-mean-server.onrender.com/api/auth"
   loggedIn = new BehaviorSubject<boolean>(false)
 
   constructor(private http: HttpClient, private router: Router) { }
