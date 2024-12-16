@@ -23,7 +23,7 @@
             </button>
         </mat-card>
 
-        <mat-card class="p-4 flex-1">
+        <mat-card class="p-4 flex-1 overflow-y-auto h-[480px]">
             <h3 class="text-xl mb-4">Expenses List</h3>
             <div *ngIf="expenses && expenses.length > 0; else noExpenses">
                 <ul>

@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Chart, registerables } from "chart.js"
 import { MatInputModule } from '@angular/material/input';
+import { ToastrService } from 'ngx-toastr';
 
 Chart.register(...registerables);
 
@@ -22,12 +23,13 @@ Chart.register(...registerables);
 export class ExpensesComponent implements OnInit {
 
   expensesService = inject(ExpensesService)
+  toastr = inject(ToastrService)
 
   expenses: IExpense[] = []
   newExpense: Partial<IExpense> = { title: '', amount: 0, date: '', category: '' };
   chart: any
   token = localStorage.getItem('token') || ''
-  summary : IExpenseSummary[] = []
+  summary: IExpenseSummary[] = []
 
   ngOnInit(): void {
     this.getAllExpenses()
@@ -43,7 +45,7 @@ export class ExpensesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching expenses:', err);
-        alert('Failed to fetch expenses. Please try again later.');
+        this.toastr.error('Failed to fetch')
       }
     });
   }
@@ -54,12 +56,13 @@ export class ExpensesComponent implements OnInit {
         this.newExpense = {
           title: '', amount: 0, date: '', category: ''
         };
+        this.toastr.success("Added new Expense")
         this.getAllExpenses();
         this.getExpenseSummary()
       },
       error: (err) => {
         console.error('Error adding expense:', err);
-        alert('Failed to add expense. Please check your input and try again.');
+        this.toastr.error('Failed to add expense')
       }
     });
   }
@@ -79,23 +82,24 @@ export class ExpensesComponent implements OnInit {
   deleteExpense(id: string) {
     this.expensesService.deleteExpense(id, this.token).subscribe({
       next: () => {
+        this.toastr.success('Deleted Expense')
         this.getAllExpenses();
         this.getExpenseSummary()
       },
       error: (err) => {
         console.error(`Error deleting expense with ID ${id}:`, err);
-        alert('Failed to delete expense. Please try again.');
+        this.toastr.error('Failed to delete expense')
       }
     });
   }
 
-  getExpenseSummary(){
+  getExpenseSummary() {
     this.expensesService.getExpenseSummary(this.token).subscribe({
-      next: (data: IExpenseSummary[]) =>{
+      next: (data: IExpenseSummary[]) => {
         this.summary = data
       },
-      error: (err) =>{
-        alert("expense summary is failed to fetch")
+      error: (err) => {
+        this.toastr.error('Failed to fetch expense summary')
         console.error(err)
       }
     })
@@ -123,7 +127,7 @@ export class ExpensesComponent implements OnInit {
         datasets: [
           {
             data: data,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+            backgroundColor: ['#003f5c', '2f4b7c', '#665191', '#a05195', '#d45087', '#f95d6a', '#ff7c43', '#ffa600'],
           },
         ],
       },

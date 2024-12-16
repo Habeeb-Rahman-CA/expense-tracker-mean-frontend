@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent {
   authService = inject(AuthService)
   loginForm: FormGroup;
   router = inject(Router)
+  toastr = inject(ToastrService)
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -35,11 +37,11 @@ export class LoginComponent {
       this.authService.login({email, password}).subscribe({
         next: (response: any) => {
           localStorage.setItem('token', response.token)
-          alert('Login Successful!');
+          this.toastr.success('Your successfully logged in', 'Congratulations')
           this.router.navigate(['/dashboard'])
         },
         error: (err) => {
-          alert("Login failed")
+          this.toastr.error('Check you email and password', 'Invalid Credential')
           console.error('Login failed:', err);
         }
       });
