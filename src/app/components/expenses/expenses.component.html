@@ -33,7 +33,7 @@
                             ({{ expense.category }}) on {{ expense.date | date: 'shortDate' }}
                         </span>
                         <span>
-                            <button mat-icon-button color="warn" (click)="deleteExpense(expense.id)">
+                            <button mat-icon-button color="warn" (click)="deleteExpense(expense._id)">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </span>
@@ -47,8 +47,14 @@
         <p>No expenses found.</p>
     </ng-template>
 
-    <mat-card class="p-4 mt-4">
-        <h3 class="text-xl mb-4">Expense Summary</h3>
-        <canvas id="expenseChart" width="400" height="400"></canvas>
-    </mat-card>
+    <div class="flex gap-4">
+        <mat-card class="p-4 mt-4 w-3/4">
+            <h3 class="text-xl mb-4">Expense Summary</h3>
+        </mat-card>
+        <mat-card class="p-4 mt-4 w-1/4">
+            <canvas id="expenseChart" class="w-1"></canvas>
+        </mat-card>
+    </div>
+
+    
 </div>

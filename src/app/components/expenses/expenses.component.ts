@@ -24,7 +24,7 @@ export class ExpensesComponent implements OnInit {
   expensesService = inject(ExpensesService)
 
   expenses: IExpense[] = []
-  newExpense: IExpense = { id: '', title: '', amount: 0, date: '', category: '' };
+  newExpense: Partial<IExpense> = { title: '', amount: 0, date: '', category: '' };
   chart: any
   token = localStorage.getItem('token') || ''
 
@@ -36,6 +36,7 @@ export class ExpensesComponent implements OnInit {
     this.expensesService.getExpenses(this.token).subscribe({
       next: (data: IExpense[]) => {
         this.expenses = data;
+        console.log(data)
         this.generateChart();
       },
       error: (err) => {
@@ -49,7 +50,7 @@ export class ExpensesComponent implements OnInit {
     this.expensesService.addExpenses(this.newExpense, this.token).subscribe({
       next: () => {
         this.newExpense = {
-          id: '', title: '', amount: 0, date: '', category: ''
+          title: '', amount: 0, date: '', category: ''
         };
         this.getAllExpenses();
       },
@@ -66,7 +67,7 @@ export class ExpensesComponent implements OnInit {
         this.getAllExpenses();
       },
       error: (err) => {
-        console.error(`Error updating expense with ID ${expense.id}:`, err);
+        console.error(`Error updating expense with ID ${expense._id}:`, err);
         alert('Failed to update expense. Please try again.');
       }
     });

@@ -24,7 +24,7 @@ export class ExpensesService {
 
   updateExpense(expense: IExpense, token: string): Observable<IExpense> {
     const header = new HttpHeaders().set('Authorization', `Bearer ${token}`)
-    return this.http.put<IExpense>(`${this.expensesUrl}/${expense.id}`, expense, { headers: header });
+    return this.http.put<IExpense>(`${this.expensesUrl}/${expense._id}`, expense, { headers: header });
   }
 
   deleteExpense(id: string, token: string) {
