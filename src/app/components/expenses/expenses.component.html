@@ -48,7 +48,7 @@
     </ng-template>
 
     <div class="flex gap-4">
-        <mat-card class="p-4 mt-4 w-3/4">
+        <mat-card class="p-4 mt-4 w-3/4 h-[440px] overflow-y-auto">
             <h3 class="text-xl mb-4">Expense Summary</h3>
             <div *ngIf="summary.length > 0; else noData">
                 <div *ngFor="let item of summary" class="mb-4">
@@ -64,6 +64,14 @@
         </mat-card>
         <mat-card class="p-4 mt-4 w-1/4">
             <canvas id="expenseChart" class="w-1"></canvas>
+            <div class="mt-8 flex gap-4 mx-auto">
+                <button mat-raised-button color="accent" (click)="exportData('pdf')">
+                    Export to PDF
+                </button>
+                <button mat-raised-button color="primary" (click)="exportData('excel')">
+                    Export to Excel
+                </button>
+            </div>
         </mat-card>
     </div>
 </div>

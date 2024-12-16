@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Chart, registerables } from "chart.js"
 import { MatInputModule } from '@angular/material/input';
 import { ToastrService } from 'ngx-toastr';
+import { saveAs } from 'file-saver'
 
 Chart.register(...registerables);
 
@@ -132,6 +133,17 @@ export class ExpensesComponent implements OnInit {
         ],
       },
     });
+  }
+
+  exportData(format: string) {
+    const data = JSON.stringify(this.expenses, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+
+    if (format === 'pdf') {
+      saveAs(blob, 'expenses.pdf');
+    } else if (format === 'excel') {
+      saveAs(blob, 'expenses.xlsx');
+    }
   }
 
 }
